@@ -23,7 +23,7 @@ app.post('/postCertData', async (req, res) => {
     //Cria os certificados
     await newCert.newCert(newData);
 
-    await sendCert.sendCert(emailsArray[i], `${name.split(' ').join('_')}_${eventName.split(' ').join('_')}.pdf`)
+    await sendCert.sendCert(emailsArray[i], `${name.split(' ').join('_')}_${eventName.split(' ').join('_')}`, newData.subject, newData.text)
   });
   return res.send("Sending Emails");
 });

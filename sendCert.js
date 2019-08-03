@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-const sendCert = (email, certificate) => {
+const sendCert = (email, certificate, subject, text) => {
   let result = null;
   let transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
@@ -15,8 +15,8 @@ const sendCert = (email, certificate) => {
   const message = {
     from: '"Broto Incubadora de Biotecnologia" <brotobiotec@gmail.com>',
     to: email,
-    subject: 'Seu sertificado do EVENTO chegou!',
-    text: 'Seu certificado se encontra em anexo!',
+    subject,
+    text,
     attachments: [{
       filename: `${certificate}.pdf`,
       path: `./certificates/${certificate}.pdf`
