@@ -11,7 +11,9 @@
 
 # production
 /build
-
+*.pdf
+*.jpg
+*.png
 # misc
 .env
 .DS_Store

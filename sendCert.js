@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 
-const sendCert = (email, certificate) => {
+const sendCert = async (email, certificate) => {
+  let result = null;
   let transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
@@ -22,12 +23,16 @@ const sendCert = (email, certificate) => {
     }]
   };
 
-  transporter.sendMail(message, (error, info) => {
+  await transporter.sendMail(message, async (error, info) => {
     if (error) {
-        return console.log(error);
+      result = error
+      console.log('error =>',result);
+      return await result
     }
     console.log('Message sent: %s', info.messageId);
+    return await result
   });
+  return await result
 }
 
 module.exports = {sendCert};

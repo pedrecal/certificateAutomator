@@ -1,17 +1,3 @@
-const path = require('path');
-const HTML5ToPDF = require('html5-to-pdf');
-const Intl = require('intl');
-
-require('intl/locale-data/jsonp/pt-BR');
-
-const newCert = async data => {
-  const dateFormat = new Intl.DateTimeFormat('pt-BR', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
-  const { eventModality, certNumber, fullNameCert, eventName, eventDate, workload, fullNameCoord, positionCoord, CPFCert, signatureFile } = data;
-  const resultHTML = `
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -49,8 +35,9 @@ const newCert = async data => {
         text-align: center;
       }
       .footer {
-        position: relative;
-        top: 35px;
+        position: absolute;
+        bottom: 80px;
+        left: 38%;
       }
       .num {
         position: absolute;
@@ -79,7 +66,9 @@ const newCert = async data => {
     <!-- Each sheet element should have the class "sheet" -->
     <!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
     <section class="sheet padding-15mm">
-      <div class="num" style="font-family:Times, serif;">Nº ${certNumber}/2019</div>
+      <div class="num" style="font-family:Times, serif;">
+        Nº ${certNumber}/2019
+      </div>
       <img src="images/docs/uesc-cert2.jpg" style="width: 250px;" />
       <img
         src="images/docs/broto-logo.jpg"
@@ -99,9 +88,10 @@ const newCert = async data => {
       <article class="content">
         <p style="text-indent: 4em">
           Certifica-se que ${fullNameCert}, CPF nº ${CPFCert} participou da
-          ${eventModality} e ${eventName}, realizado pela BROTO Incubadora de Biotecnologia
-          da Universidade Estadual de Santa Cruz (UESC), em ${eventDate}, com
-          carga horária ${workload} horas, na condição de ${eventModality}.
+          ${eventModality} e ${eventName}, realizado pela BROTO Incubadora de
+          Biotecnologia da Universidade Estadual de Santa Cruz (UESC), em
+          ${eventDate}, com carga horária ${workload} horas, na condição de
+          ${eventModality}.
         </p>
         <br />
         <br />
@@ -109,9 +99,11 @@ const newCert = async data => {
         <br />
         <br />
         <p class="center">
-          <i>Campus</i> Prof. Soane Nazaré de Andrade, Ilhéus/BA, ${dateFormat.format(new Date())}.
+          <i>Campus</i> Prof. Soane Nazaré de Andrade, Ilhéus/BA,
+          ${dateFormat.format(new Date())}.
         </p>
         <div class="center footer" style="font-weight: bold; font-size: 13px">
+          <img src="public/images/tmp/test.jpg" style="width: 300px" />
           <p style="margin-bottom: 0; font-size: 16px">
             ${fullNameCoord}
           </p>
@@ -126,23 +118,3 @@ const newCert = async data => {
     </section>
   </body>
 </html>
-
-`;
-
-  const html5ToPDF = new HTML5ToPDF({
-    inputBody: resultHTML,
-    launchOptions: {args: ['--no-sandbox']},
-    outputPath: path.join(__dirname, 'certificates', `${fullNameCert.split(' ').join('_')}_${eventName.split(' ').join('_')}.pdf`),
-    templatePath: path.join(__dirname, 'public'),
-    options: {
-      pageSize: 'A4',
-      landscape: true,
-    },
-  });
-
-  await html5ToPDF.start();
-  await html5ToPDF.build();
-  await html5ToPDF.close();
-};
-
-module.exports = {newCert};
