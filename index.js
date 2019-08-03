@@ -23,9 +23,9 @@ app.post('/postCertData', async (req, res) => {
     //Cria os certificados
     await newCert.newCert(newData);
 
-    const sent = await sendCert.sendCert(emailsArray[i], `${name.split(' ').join('_')}_${eventName.split(' ').join('_')}.pdf`)
-    console.log(await sent);
+    await sendCert.sendCert(emailsArray[i], `${name.split(' ').join('_')}_${eventName.split(' ').join('_')}.pdf`)
   });
+  return res.send("Sending Emails");
 });
 
 const storage = multer.diskStorage({
